@@ -101,7 +101,9 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/editText3"
                 android:layout_weight="2"
-                android:textColor="@color/textDarkRed" />
+                android:textColor="@color/textDarkRed"
+                android:inputType="textPassword" />
+
         </LinearLayout>
 
         <TextView
@@ -164,8 +166,9 @@
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/radioButton"
-                android:layout_marginLeft="20dp" />
+                android:id="@+id/radioButton1"
+                android:layout_marginLeft="20dp"
+                android:checked="false" />
 
             <RadioButton
                 android:layout_width="wrap_content"
