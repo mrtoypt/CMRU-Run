@@ -10,6 +10,7 @@ public class MyData {
 
 
     // สร้าง Geter โดยการกด Alt + Ins เลือก Getter แล้ว OK
+
     public int[] getAvataInts() {
         return avataInts;
     }
