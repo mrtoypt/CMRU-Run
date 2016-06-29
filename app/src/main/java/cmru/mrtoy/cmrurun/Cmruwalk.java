@@ -109,6 +109,10 @@ public class Cmruwalk extends AppCompatActivity {
                     // Toast = ข้อความต้อนรับขึ้นมาระยะหนึ่งแล้วหายไป
                     Toast.makeText(context, "Wellcome " + nameuserString, Toast.LENGTH_SHORT).show();
 
+                    Intent intent = new Intent(Cmruwalk.this, MapsActivity.class);
+                    startActivity(intent);
+                    finish();
+
 
                 } else {
                     //passwd false
