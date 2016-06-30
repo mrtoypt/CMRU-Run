@@ -6,6 +6,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -29,6 +30,9 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -76,6 +80,56 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     } // end of main
 
+    private class SynLocation extends AsyncTask<Void, Void, String> {
+        private static final String urlJSON = "http://swiftcodingthai.com/cmru/get_user_master.php";
+        private MyData myData;
+
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            try {
+                OkHttpClient okHttpClient = new OkHttpClient();
+                Request.Builder builder = new Request.Builder();
+                Request request = builder.url(urlJSON).build();
+                Response response = okHttpClient.newCall(request).execute();
+                return response.body().string();
+            } catch (Exception e) {
+                Log.d("30JunV2", "e doIt ==>" + e.toString());
+                return null;
+            }
+
+        } // end of doInBackground
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Log.d("30JunV3", "jSON ==>" + s);
+
+            myData = new MyData();
+            int[] intIcon = myData.getAvataInts();
+
+            try {
+                JSONArray jsonArray = new JSONArray(s);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    String strName = jsonObject.getString("Name");
+                    int iconMarker = intIcon[Integer.parseInt(jsonObject.getString("Avata"))];
+                    double douLat = Double.parseDouble(jsonObject.getString("Lat"));
+                    double douLng = Double.parseDouble(jsonObject.getString("Lng"));
+                    LatLng latLng = new LatLng(douLat, douLng);
+                    mMap.addMarker(new MarkerOptions()
+                            .position(latLng)
+                            .icon(BitmapDescriptorFactory.fromResource(iconMarker))
+                            .title(strName));
+
+
+                }
+            } catch (Exception e) {
+                Log.d("30JunV4", "e onPOST ==>" + e.toString());
+            }
+
+        }
+    } // end of SynLocation
 
     @Override
     protected void onStop() {
@@ -165,7 +219,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void myLoop() {
         Log.d("29JuneV1", "userLat == " + userLatADouble);
         Log.d("29JuneV1", "userLng == " + userLngADouble);
+
+        mMap.clear();
+        creatStationMarker();
+
+
         editLocation();
+
+        SynLocation synLocation = new SynLocation();
+        synLocation.execute();
+
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override

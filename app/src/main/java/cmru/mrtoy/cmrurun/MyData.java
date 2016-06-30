@@ -5,7 +5,7 @@ package cmru.mrtoy.cmrurun;
  */
 public class MyData {
     // Explicit
-    private int[] avataInts = new int[]{20,R.drawable.bird48 , R.drawable.doremon48 ,
+    private int[] avataInts = new int[]{R.drawable.bird48 , R.drawable.doremon48 ,
     R.drawable.kon48 ,R.drawable.nobita48 ,R.drawable.rat48};
     private double[] latStationDoubles = new double[]{18.808869, 18.808788, 18.805885, 18.806241};
     private double[] lngStationDoubles = new double[]{99.017871, 99.018768, 99.018228, 99.017471};
