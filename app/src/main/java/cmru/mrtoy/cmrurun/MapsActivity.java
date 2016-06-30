@@ -2,6 +2,7 @@ package cmru.mrtoy.cmrurun;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -272,6 +273,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void confirmDialog() {
         ststusABoolean = false;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setCancelable(false);
+        builder.setIcon(R.drawable.doremon48);
+        builder.setTitle("คุณถึงด่านที่ " + Integer.toString(Integer.parseInt(goldString)+1));
+        builder.setMessage("คุณต้องทำคะแนน 3/5 ถึงจะผ่านไปได้");
+        builder.setPositiveButton("เริ่มตอบคำถาม", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        })
 
 
     } //end confirmDialog
