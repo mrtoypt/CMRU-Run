@@ -1,5 +1,6 @@
 package cmru.mrtoy.cmrurun;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.location.Criteria;
 import android.location.Location;
@@ -45,6 +46,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Criteria criteria;
     private String userIDString, userNameString, goldString;
     private static final String urlEditLocation = "http://swiftcodingthai.com/cmru/edit_location_master.php";
+    private boolean ststusABoolean = true;
+
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -231,13 +234,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SynLocation synLocation = new SynLocation();
         synLocation.execute();
 
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                myLoop();
-            }
-        }, 3000);
+        if (ststusABoolean) {
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    myLoop();
+                }
+            }, 3000);
+        }
     }
 
     private void checkDistance() {
@@ -257,10 +262,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         douMyDistance = douMyDistance * 60 * 1.1515 * 1.609344;  // หน่วยเป็น Km
         douMyDistance = douMyDistance * 1000;// เปลี่ยนหน่วยเป็น เมตร
 
-        Log.d("30JuneV4", "MyDistance ==> เทียบกับ ฐานที่  " + goldString + " มีค่าเท่ากับ" + douMyDistance);
+        Log.d("30JuneV4", "MyDistance ==> เทียบกับ ฐานที่  " + goldString + " มีค่าเท่ากับ " + douMyDistance);
 
+        if (douMyDistance < 10) {
+            confirmDialog();
+        }
 
     }// end checkDistance
+
+    private void confirmDialog() {
+        ststusABoolean = false;
+
+
+    } //end confirmDialog
 
     private double rad2deg(double douMyDistance) {
         double result = 0;
