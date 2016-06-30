@@ -43,7 +43,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private double userLatADouble, userLngADouble;
     private LocationManager locationManager;
     private Criteria criteria;
-    private String userIDString, userNameString;
+    private String userIDString, userNameString, goldString;
     private static final String urlEditLocation = "http://swiftcodingthai.com/cmru/edit_location_master.php";
 
     /**
@@ -70,6 +70,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //get value form Inten
         userIDString = getIntent().getStringExtra("userID");
         userNameString = getIntent().getStringExtra("Name");
+        goldString = getIntent().getStringExtra("Gold");
+
         Log.d("30JunV1", "userID ==> " + userIDString);
         Log.d("30JunV1", "userName ==> " + userNameString);
 
@@ -223,7 +225,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.clear();
         creatStationMarker();
 
-
+        checkDistance();
         editLocation();
 
         SynLocation synLocation = new SynLocation();
@@ -237,6 +239,43 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }, 3000);
     }
+
+    private void checkDistance() {
+
+        // สูตรคำนวนระยะห่างของ GPS 2 ตัว = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+        MyData myData = new MyData();
+        double[] latStationDoubles = myData.getLatStationDoubles();
+        double[] lngStationDoubles = myData.getLngStationDoubles();
+
+        double douMyDistance = Math.sin(deg2rad(userLatADouble))
+                * Math.sin(deg2rad(latStationDoubles[Integer.parseInt(goldString)]))
+                + Math.cos(deg2rad(userLatADouble))
+                * Math.cos(deg2rad(latStationDoubles[Integer.parseInt(goldString)]))
+                * Math.cos(deg2rad((userLngADouble - lngStationDoubles[Integer.parseInt(goldString)])));
+        douMyDistance = Math.acos(douMyDistance);
+        douMyDistance = rad2deg(douMyDistance);
+        douMyDistance = douMyDistance * 60 * 1.1515 * 1.609344;  // หน่วยเป็น Km
+        douMyDistance = douMyDistance * 1000;// เปลี่ยนหน่วยเป็น เมตร
+
+        Log.d("30JuneV4", "MyDistance ==> เทียบกับ ฐานที่  " + goldString + " มีค่าเท่ากับ" + douMyDistance);
+
+
+    }// end checkDistance
+
+    private double rad2deg(double douMyDistance) {
+        double result = 0;
+        result = douMyDistance * 180 / Math.PI;
+
+        return result;
+    }
+
+    private double deg2rad(double userLatADouble) {
+
+        double result = 0;
+        result = userLatADouble * Math.PI / 180;
+        return result;
+
+    }// end deg2rad
 
     private void editLocation() {
         OkHttpClient okHttpClient = new OkHttpClient();

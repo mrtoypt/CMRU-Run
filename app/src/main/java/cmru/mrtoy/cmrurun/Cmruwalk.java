@@ -25,7 +25,7 @@ public class Cmruwalk extends AppCompatActivity {
     private static final String urlJSON = "http://swiftcodingthai.com/cmru/get_user_master.php";
     private ImageView imageView;
     private EditText userEditText, passwdEditText;
-    private String userString, passwdString, strID;
+    private String userString, passwdString, strID , goldString;
 
 
     @Override
@@ -95,6 +95,7 @@ public class Cmruwalk extends AppCompatActivity {
                         truePasswdString = jsonObject.getString("Password");
                         nameuserString = jsonObject.getString("Name");
                         strID = jsonObject.getString("id");
+                        goldString = jsonObject.getString("Gold");
 
                     }// end if
                 }// end for
@@ -113,6 +114,7 @@ public class Cmruwalk extends AppCompatActivity {
                     Intent intent = new Intent(Cmruwalk.this, MapsActivity.class);
                     intent.putExtra("Name", nameuserString);
                     intent.putExtra("userID", strID);
+                    intent.putExtra("Gold", goldString);
                     startActivity(intent);
                     finish();
 
