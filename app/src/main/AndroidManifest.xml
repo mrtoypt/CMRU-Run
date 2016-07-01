@@ -49,7 +49,8 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".ExcerciseActivity"></activity>
+        <activity android:name=".ExcerciseActivity" />
+        <activity android:name=".ShowFrandListView"></activity>
     </application>
 
 </manifest>

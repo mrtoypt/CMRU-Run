@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -78,7 +79,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         goldString = getIntent().getStringExtra("Gold");
 
 
-
         Log.d("30JunV1", "userID ==> " + userIDString);
         Log.d("30JunV1", "userName ==> " + userNameString);
 
@@ -88,6 +88,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
     } // end of main
+
+    public void clickListFrand(View view) {
+        startActivity(new Intent(MapsActivity.this, ShowFrandListView.class));
+    }
+
+    public void clickExit(View view) {
+        finish();
+    }
 
     private class SynLocation extends AsyncTask<Void, Void, String> {
         private static final String urlJSON = "http://swiftcodingthai.com/cmru/get_user_master.php";
@@ -280,7 +288,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         builder.setCancelable(false);
         builder.setIcon(R.drawable.doremon48);
-        builder.setTitle("คุณถึงด่านที่ " + Integer.toString(Integer.parseInt(goldString)+1));
+        builder.setTitle("คุณถึงด่านที่ " + Integer.toString(Integer.parseInt(goldString) + 1));
         builder.setMessage("คุณต้องทำคะแนน 3/5 ถึงจะผ่านไปได้");
         builder.setPositiveButton("เริ่มตอบคำถาม", new DialogInterface.OnClickListener() {
             @Override
