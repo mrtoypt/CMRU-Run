@@ -229,9 +229,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap.clear();
         creatStationMarker();
+        editLocation();
 
         checkDistance();
-        editLocation();
 
         SynLocation synLocation = new SynLocation();
         synLocation.execute();
@@ -286,6 +286,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Intent intent = new Intent(MapsActivity.this, ExcerciseActivity.class);
                 intent.putExtra("userID", userIDString);
                 intent.putExtra("Gold", goldString);
+                intent.putExtra("Avata", getIntent().getStringExtra("Avata"));
                 startActivity(intent);
                 finish();
             }

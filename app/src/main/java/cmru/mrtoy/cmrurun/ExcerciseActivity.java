@@ -1,8 +1,10 @@
 package cmru.mrtoy.cmrurun;
 
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -12,6 +14,9 @@ import android.widget.TextView;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
 public class ExcerciseActivity extends AppCompatActivity {
 
@@ -26,7 +31,6 @@ public class ExcerciseActivity extends AppCompatActivity {
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,50 +58,52 @@ public class ExcerciseActivity extends AppCompatActivity {
         int[] iconInts = myData.getAvataInts();
         int intIndex = Integer.parseInt(avataString);
         imageView.setImageResource(iconInts[intIndex]);
+
+        nameTextView.setText(nameString);
+        stationTextView.setText("ฐานที่ " + Integer.toString(Integer.parseInt(goldString) + 1));
+
+        SynQuestion synQuestion = new SynQuestion();
+        synQuestion.execute();
+
+
+
+
     }// end onCreate
+
+
+
+
+    private class SynQuestion extends AsyncTask<Void, Void, String>
+    {
+        // Explicit
+        private static final String urlJSON = "http://swiftcodingthai.com/cmru/get_question.php";
+
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            try {
+                OkHttpClient okHttpClient = new OkHttpClient();
+                Request.Builder builder = new Request.Builder();
+                Request request = builder.url(urlJSON).build();
+                Response response = okHttpClient.newCall(request).execute();
+                return response.body().string();
+            } catch (Exception e) {
+                Log.d("1JulV1","JSON ==> " + e.toString());
+                return null;
+            }
+        } // end do in
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Log.d("1JulV1","JSON ==> " + s);
+        }
+    }
+
 
     public void clickAnswer(View view) {
 
 
     }//end clickAnswer
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "Excercise Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app URL is correct.
-                Uri.parse("android-app://cmru.mrtoy.cmrurun/http/host/path")
-        );
-        AppIndex.AppIndexApi.start(client, viewAction);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "Excercise Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app URL is correct.
-                Uri.parse("android-app://cmru.mrtoy.cmrurun/http/host/path")
-        );
-        AppIndex.AppIndexApi.end(client, viewAction);
-        client.disconnect();
-    }
-}
+}// end class
