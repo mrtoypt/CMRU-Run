@@ -21,6 +21,8 @@ import com.squareup.okhttp.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.Random;
+
 public class ExcerciseActivity extends AppCompatActivity {
 
     //Expercit
@@ -29,6 +31,10 @@ public class ExcerciseActivity extends AppCompatActivity {
     private TextView nameTextView, stationTextView, questionTextView;
     private RadioGroup radioGroup;
     private RadioButton choice1RadioButton, choice2RadioButton, choice3RadioButton, choice4RadioButton;
+    private String[] myQuestionStrings, myChoice1Strings, myChoice2Strings, myChoice3Strings,
+            myChoice4Strings, myAnswerStrings;
+
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -69,15 +75,10 @@ public class ExcerciseActivity extends AppCompatActivity {
         synQuestion.execute();
 
 
-
-
     }// end onCreate
 
 
-
-
-    private class SynQuestion extends AsyncTask<Void, Void, String>
-    {
+    private class SynQuestion extends AsyncTask<Void, Void, String> {
         // Explicit
         private static final String urlJSON = "http://swiftcodingthai.com/cmru/get_question.php";
 
@@ -91,7 +92,7 @@ public class ExcerciseActivity extends AppCompatActivity {
                 Response response = okHttpClient.newCall(request).execute();
                 return response.body().string();
             } catch (Exception e) {
-                Log.d("1JulV1","JSON ==> " + e.toString());
+                Log.d("1JulV1", "JSON ==> " + e.toString());
                 return null;
             }
         } // end do in
@@ -99,7 +100,7 @@ public class ExcerciseActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.d("1JulV1","JSON ==> " + s);
+            Log.d("1JulV1", "JSON ==> " + s);
 
 
             try {
@@ -112,7 +113,7 @@ public class ExcerciseActivity extends AppCompatActivity {
                 String[] answerStrings = new String[jsonArray.length()];
 
 
-                for (int i=0;i<jsonArray.length();i++) {
+                for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     questionStrings[i] = jsonObject.getString("Question");
                     choice1Strings[i] = jsonObject.getString("Choice1");
@@ -120,14 +121,36 @@ public class ExcerciseActivity extends AppCompatActivity {
                     choice3Strings[i] = jsonObject.getString("Choice3");
                     choice4Strings[i] = jsonObject.getString("Choice4");
                     answerStrings[i] = jsonObject.getString("Answer");
-                    Log.d("1JulV3","Question(" + i + ") ==> " + questionStrings[i]);
 
-                }//end for
+                    Log.d("1JulV3", "Question(" + i + ") ==> " + questionStrings[i]);
+
+                }//end for jsonArray
+
+                myQuestionStrings = new String[5];
+                myChoice1Strings = new String[5];
+                myChoice2Strings = new String[5];
+                myChoice3Strings = new String[5];
+                myChoice4Strings = new String[5];
+                myAnswerStrings = new String[5];
+
+                for (int i = 0; i < 5; i++) {
+                    Random random = new Random();
+                    int randomIndex = random.nextInt(jsonArray.length());
+
+                    myQuestionStrings[i] = questionStrings[randomIndex];
+                    myChoice1Strings[i] = choice1Strings[randomIndex];
+                    myChoice2Strings[i] = choice2Strings[randomIndex];
+                    myChoice3Strings[i] = choice3Strings[randomIndex];
+                    myChoice4Strings[i] = choice4Strings[randomIndex];
+                    myAnswerStrings[i] = answerStrings[randomIndex];
+
+
+                }//end for i<5
+
 
             } catch (Exception e) {
-                Log.d("1JulV2","e onPost ==> " + e.toString());
+                Log.d("1JulV2", "e onPost ==> " + e.toString());
             }
-
 
 
         }
@@ -135,7 +158,9 @@ public class ExcerciseActivity extends AppCompatActivity {
 
 
     public void clickAnswer(View view) {
-
+        for (int i = 0; i < 5; i++) {
+            Log.d("1JulV4", "myQuestion(" + i + ") ==> " + myQuestionStrings[i]);
+        } // for
 
     }//end clickAnswer
 
