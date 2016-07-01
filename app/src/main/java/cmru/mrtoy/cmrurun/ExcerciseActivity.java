@@ -181,6 +181,9 @@ public class ExcerciseActivity extends AppCompatActivity {
             if(timesAnsInt!=4) {
                 timesAnsInt += 1;
             }
+
+            radioGroup.clearCheck();
+
             questionTextView.setText(myQuestionStrings[timesAnsInt]);
             // Show in time
             questionTextView.setText(Integer.toString(timesAnsInt + 1) + ". " + myQuestionStrings[timesAnsInt]);
