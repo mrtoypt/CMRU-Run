@@ -18,6 +18,9 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 public class ExcerciseActivity extends AppCompatActivity {
 
     //Expercit
@@ -97,6 +100,36 @@ public class ExcerciseActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             Log.d("1JulV1","JSON ==> " + s);
+
+
+            try {
+                JSONArray jsonArray = new JSONArray(s);
+                String[] questionStrings = new String[jsonArray.length()];
+                String[] choice1Strings = new String[jsonArray.length()];
+                String[] choice2Strings = new String[jsonArray.length()];
+                String[] choice3Strings = new String[jsonArray.length()];
+                String[] choice4Strings = new String[jsonArray.length()];
+                String[] answerStrings = new String[jsonArray.length()];
+
+
+                for (int i=0;i<jsonArray.length();i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    questionStrings[i] = jsonObject.getString("Question");
+                    choice1Strings[i] = jsonObject.getString("Choice1");
+                    choice2Strings[i] = jsonObject.getString("Choice2");
+                    choice3Strings[i] = jsonObject.getString("Choice3");
+                    choice4Strings[i] = jsonObject.getString("Choice4");
+                    answerStrings[i] = jsonObject.getString("Answer");
+                    Log.d("1JulV3","Question(" + i + ") ==> " + questionStrings[i]);
+
+                }//end for
+
+            } catch (Exception e) {
+                Log.d("1JulV2","e onPost ==> " + e.toString());
+            }
+
+
+
         }
     }
 
