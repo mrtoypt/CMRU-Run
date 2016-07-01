@@ -1,5 +1,6 @@
 package cmru.mrtoy.cmrurun;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -10,17 +11,23 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.squareup.okhttp.Call;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.Random;
 
 public class ExcerciseActivity extends AppCompatActivity {
@@ -34,6 +41,7 @@ public class ExcerciseActivity extends AppCompatActivity {
     private String[] myQuestionStrings, myChoice1Strings, myChoice2Strings, myChoice3Strings,
             myChoice4Strings, myAnswerStrings;
     private int timesAnsInt = 0, scoreAnsInt = 0, userChoosInt;
+    private int intGold;
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -198,15 +206,17 @@ public class ExcerciseActivity extends AppCompatActivity {
 
         } else if (timesAnsInt < 5) {
             // Check Score
-            if(userChoosInt==Integer.parseInt(myAnswerStrings[timesAnsInt])){
+            if (userChoosInt == Integer.parseInt(myAnswerStrings[timesAnsInt])) {
                 scoreAnsInt += 1;
                 Log.d("1JulV5", "scoreAnsInt  ==> " + scoreAnsInt);
             }
 
             if (timesAnsInt != 4) {
                 timesAnsInt += 1;
-            }else{
+            } else {
                 // Time = 4 คือ ข้อ 5
+                Log.d("1JulV5", "End of time Score = " + scoreAnsInt);
+                checkUserScore();
             }
 
             radioGroup.clearCheck();
@@ -227,6 +237,65 @@ public class ExcerciseActivity extends AppCompatActivity {
 
 
     }//end clickAnswer
+
+    private void checkUserScore() {
+        if (scoreAnsInt >= 3) {
+            //Update Gold ผ่านด่าน
+            Toast.makeText(this, "ยินดีด้วยคุณ ผ่านด่านแล้ว", Toast.LENGTH_SHORT).show();
+            editGoldOnsever(); // ปรับปรุงค่าด่าน
+
+        } else {
+            // Play Again
+            Toast.makeText(this, "คะแนนของคุณ " + Integer.toString(scoreAnsInt) + " คะแนน ต้องตอบคำถามใหม่",
+                    Toast.LENGTH_SHORT).show();
+
+            Intent intent = getIntent();
+            finish(); // ปิดหน้านี้
+            startActivity(intent);  // เริ่มหน้านี้ใหม่  คือ การ Refresh Page
+
+
+        }//end scoreAnsInt
+
+
+    }// end checkUserScore
+
+    private void editGoldOnsever() {
+        String urlUpGoldPHP = "http://swiftcodingthai.com/cmru/edit_gold.php";
+        if (Integer.parseInt(goldString) < 4) {
+            intGold = Integer.parseInt(goldString) + 1;
+        } else {
+            // fishnish St
+        }
+        OkHttpClient okHttpClient = new OkHttpClient();
+        RequestBody requestBody = new FormEncodingBuilder()
+                .add("isAdd", "true")
+                .add("id", userIDString)
+                .add("Gold", Integer.toString(intGold))
+                .build();
+        Request.Builder builder = new Request.Builder();
+        Request request = builder.url(urlUpGoldPHP).post(requestBody).build();
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+
+            }
+        });
+        Intent intent = new Intent(ExcerciseActivity.this, MapsActivity.class);
+        intent.putExtra("userID", userIDString);
+        intent.putExtra("Name", nameString);
+        intent.putExtra("Gold", Integer.toString(intGold));
+        startActivity(intent);
+        finish();
+
+
+
+    }//end editGoldOnsever
 
     private boolean checkChoose() {
         boolean result = true;

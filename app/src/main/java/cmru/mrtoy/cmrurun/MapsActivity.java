@@ -77,6 +77,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         userNameString = getIntent().getStringExtra("Name");
         goldString = getIntent().getStringExtra("Gold");
 
+
+
         Log.d("30JunV1", "userID ==> " + userIDString);
         Log.d("30JunV1", "userName ==> " + userNameString);
 
