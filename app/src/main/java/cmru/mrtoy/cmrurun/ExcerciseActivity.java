@@ -33,6 +33,7 @@ public class ExcerciseActivity extends AppCompatActivity {
     private RadioButton choice1RadioButton, choice2RadioButton, choice3RadioButton, choice4RadioButton;
     private String[] myQuestionStrings, myChoice1Strings, myChoice2Strings, myChoice3Strings,
             myChoice4Strings, myAnswerStrings;
+    private int timesAnsInt = 0;
 
 
     /**
@@ -147,6 +148,13 @@ public class ExcerciseActivity extends AppCompatActivity {
 
                 }//end for i<5
 
+                // Show in time
+                questionTextView.setText("1. " + myQuestionStrings[0]);
+                choice1RadioButton.setText(myChoice1Strings[0]);
+                choice2RadioButton.setText(myChoice2Strings[0]);
+                choice3RadioButton.setText(myChoice3Strings[0]);
+                choice4RadioButton.setText(myChoice4Strings[0]);
+
 
             } catch (Exception e) {
                 Log.d("1JulV2", "e onPost ==> " + e.toString());
@@ -162,6 +170,44 @@ public class ExcerciseActivity extends AppCompatActivity {
             Log.d("1JulV4", "myQuestion(" + i + ") ==> " + myQuestionStrings[i]);
         } // for
 
+        //check Choose
+        if (checkChoose()) {
+            // Not Check Choice
+            MyAlert myAlert = new MyAlert();
+            myAlert.myDialog(this, "ยังไม่ได้เลือกคำตอบ", "กรุณาเลือกคำตอบด้วย");
+
+        } else if (timesAnsInt <5 ) {
+
+            if(timesAnsInt!=4) {
+                timesAnsInt += 1;
+            }
+            questionTextView.setText(myQuestionStrings[timesAnsInt]);
+            // Show in time
+            questionTextView.setText(Integer.toString(timesAnsInt + 1) + ". " + myQuestionStrings[timesAnsInt]);
+            choice1RadioButton.setText(myChoice1Strings[timesAnsInt]);
+            choice2RadioButton.setText(myChoice2Strings[timesAnsInt]);
+            choice3RadioButton.setText(myChoice3Strings[timesAnsInt]);
+            choice4RadioButton.setText(myChoice4Strings[timesAnsInt]);
+
+        } else {
+            // End of time
+
+
+        }//end  if (checkChoose())
+
+
     }//end clickAnswer
+
+    private boolean checkChoose() {
+        boolean result = true;
+        if (choice1RadioButton.isChecked() || choice2RadioButton.isChecked() ||
+                choice3RadioButton.isChecked() || choice4RadioButton.isChecked()) {
+            result = false;
+        } else {
+            result = true;
+        }//end  if choice
+
+        return result;
+    }//end checkChoose
 
 }// end class
