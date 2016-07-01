@@ -33,8 +33,7 @@ public class ExcerciseActivity extends AppCompatActivity {
     private RadioButton choice1RadioButton, choice2RadioButton, choice3RadioButton, choice4RadioButton;
     private String[] myQuestionStrings, myChoice1Strings, myChoice2Strings, myChoice3Strings,
             myChoice4Strings, myAnswerStrings;
-    private int timesAnsInt = 0;
-
+    private int timesAnsInt = 0, scoreAnsInt = 0, userChoosInt;
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -75,6 +74,27 @@ public class ExcerciseActivity extends AppCompatActivity {
         SynQuestion synQuestion = new SynQuestion();
         synQuestion.execute();
 
+
+        //Get Value
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                switch (i) {
+                    case R.id.radioButton:
+                        userChoosInt = 1;
+                        break;
+                    case R.id.radioButton6:
+                        userChoosInt = 2;
+                        break;
+                    case R.id.radioButton7:
+                        userChoosInt = 3;
+                        break;
+                    case R.id.radioButton8:
+                        userChoosInt = 4;
+                        break;
+                }
+            }
+        });
 
     }// end onCreate
 
@@ -176,9 +196,14 @@ public class ExcerciseActivity extends AppCompatActivity {
             MyAlert myAlert = new MyAlert();
             myAlert.myDialog(this, "ยังไม่ได้เลือกคำตอบ", "กรุณาเลือกคำตอบด้วย");
 
-        } else if (timesAnsInt <5 ) {
+        } else if (timesAnsInt < 5) {
+            // Check Score
+            if(userChoosInt==Integer.parseInt(myAnswerStrings[timesAnsInt])){
+                scoreAnsInt += 1;
+                Log.d("1JulV5", "scoreAnsInt  ==> " + scoreAnsInt);
+            }
 
-            if(timesAnsInt!=4) {
+            if (timesAnsInt != 4) {
                 timesAnsInt += 1;
             }
 
