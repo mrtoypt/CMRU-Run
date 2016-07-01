@@ -205,6 +205,8 @@ public class ExcerciseActivity extends AppCompatActivity {
 
             if (timesAnsInt != 4) {
                 timesAnsInt += 1;
+            }else{
+                // Time = 4 คือ ข้อ 5
             }
 
             radioGroup.clearCheck();
